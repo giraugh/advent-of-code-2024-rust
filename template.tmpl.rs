@@ -1,7 +1,5 @@
 use std::fmt::Debug;
 
-use itertools::Itertools;
-
 pub struct Day06;
 
 impl aoc::Puzzle for Day06 {

@@ -15,7 +15,12 @@ pub trait Puzzle {
 pub fn run_puzzle<T: Puzzle>() {
     // Read input
     let input_path = env::args().nth(1).unwrap_or("./input.txt".to_owned());
-    let input_text = fs::read_to_string(&input_path)
+    run_puzzle_with_path::<T>(&input_path)
+}
+
+pub fn run_puzzle_with_path<T: Puzzle>(input_path: &str) {
+    // Read input
+    let input_text = fs::read_to_string(input_path)
         .unwrap_or_else(|_| panic!("Can't find AOC input file {}", &input_path));
     println!("[Read {}]", input_path);
 
