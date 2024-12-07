@@ -1,3 +1,5 @@
+pub mod utils;
+
 use std::{env, fmt, fs};
 
 pub trait Puzzle {

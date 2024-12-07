@@ -31,24 +31,21 @@ impl SuccessorMap {
         true
     }
 
-    /// Little bit lazy but this just a sort of "bubble sort"
     pub fn fix_update(&self, update: &[usize]) -> Vec<usize> {
         let mut update = update.iter().cloned().collect_vec();
-        while !self.update_is_valid(&update) {
-            update.sort_by(|a, b| {
-                let succs = self.0.get(a);
-                match succs {
-                    Some(succs) => {
-                        if succs.contains(b) {
-                            Ordering::Less
-                        } else {
-                            Ordering::Greater
-                        }
+        update.sort_by(|a, b| {
+            let succs = self.0.get(a);
+            match succs {
+                Some(succs) => {
+                    if succs.contains(b) {
+                        Ordering::Less
+                    } else {
+                        Ordering::Greater
                     }
-                    None => Ordering::Equal,
                 }
-            });
-        }
+                None => Ordering::Equal,
+            }
+        });
         update
     }
 }
