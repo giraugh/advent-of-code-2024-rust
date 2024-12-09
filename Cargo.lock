@@ -71,6 +71,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "day08"
+version = "0.1.0"
+dependencies = [
+ "aoc",
+ "itertools",
+ "nom",
+]
+
+[[package]]
 name = "derive_more"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
