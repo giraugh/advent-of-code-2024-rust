@@ -1,32 +1,43 @@
 use std::fmt::Debug;
 
+use hashbag::HashBag;
 use itertools::Itertools;
 use tqdm::Iter;
 
 pub struct Day11;
 
 #[derive(Clone, Debug)]
-pub struct Stones(Vec<usize>);
+pub struct Stones(HashBag<usize>);
+
+impl Stones {
+    pub fn new(items: impl IntoIterator<Item = usize>) -> Self {
+        Self(items.into_iter().collect())
+    }
+}
 
 impl Stones {
     pub fn blink(&mut self) {
-        for index in (0..self.0.len()).rev() {
-            match self.0[index] {
-                0 => {
-                    self.0[index] = 1;
-                }
-                x if (x.ilog10() + 1) % 2 == 0 => {
-                    let n = x.ilog10() as usize;
-                    let p: usize = (n + 1) / 2;
-                    let o = 10_usize.pow(p as u32);
-                    self.0[index] = x / o;
-                    self.0.insert(index + 1, x % o);
-                }
-                _ => {
-                    self.0[index] *= 2024;
-                }
+        let mut new_bag = HashBag::new();
+        self.0.set_iter().for_each(|(value, count)| match value {
+            0 => {
+                new_bag.insert_many(1, count);
             }
-        }
+            x if (x.ilog10() + 1) % 2 == 0 => {
+                let n = (x.ilog10() + 1) / 2;
+                let p = 10_usize.pow(n);
+                new_bag.insert_many(x / p, count);
+                new_bag.insert_many(x % p, count);
+            }
+            _ => {
+                new_bag.insert_many(value * 2024, count);
+            }
+        });
+
+        self.0 = new_bag;
+    }
+
+    pub fn size(&self) -> usize {
+        self.0.len()
     }
 }
 
@@ -34,7 +45,7 @@ impl aoc::Puzzle for Day11 {
     type Parsed = Stones;
 
     fn parse(input: &str) -> Self::Parsed {
-        Stones(
+        Stones::new(
             input
                 .lines()
                 .next()
@@ -49,14 +60,14 @@ impl aoc::Puzzle for Day11 {
         for _ in 0..25 {
             input.blink();
         }
-        input.0.len()
+        input.size()
     }
 
     fn solve_part2(mut input: Self::Parsed) -> impl Debug {
-        for _ in (0..75).tqdm() {
+        for _ in 0..75 {
             input.blink();
         }
-        input.0.len()
+        input.size()
     }
 }
 

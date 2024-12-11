@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 aoc = { version = "0.1.0", path = "../aoc" }
+hashbag = "0.1.12"
 itertools.workspace = true
 nom = "7.1.3"
 rayon = "1.10.0"
